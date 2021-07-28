@@ -1,35 +1,50 @@
+// __tests__/Nav.test.js with hard coded categories
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import Nav from '..';
-import { getLCP } from 'web-vitals';
+
+const categories = [
+  { name: 'portraits', description: 'Portraits of people in my life' }
+]
+const mockCurrentCategory = jest.fn();
+const mockSetCurrentCategory = jest.fn();
+
 
 afterEach(cleanup);
 
 describe('Nav component', () => {
-    //baseline test
-    it('renders', () => {
-        render(<Nav/>);
-    });
-
-    //snapshot test
-    it('matches snapshot', () => {
-        const { asFragment } = render(<Nav/>);
-        expect(asFragment()).toMatchSnapshot();
-    })
+  it('renders', () => {
+    render(<Nav 
+      categories={categories}
+      mockSetCurrentCategory={mockSetCurrentCategory}
+      currentCategory={mockCurrentCategory}
+    />);
+  });
 })
 
-describe('emoji is available', () => {
-    it('inserts emoji into h2', () => {
-        const { getByLabelText } = render(<Nav/>)
-        expect(getByLabelText('camera')).toHaveTextContent('📸');
-    });
+describe('emoji is visible', () => {
+  it('inserts emoji into the h2', () => {
+    const { getByLabelText } = render(<Nav
+      categories={categories}
+      mockSetCurrentCategory={mockSetCurrentCategory}
+      currentCategory={mockCurrentCategory}
+    />);
+
+    expect(getByLabelText('camera')).toHaveTextContent('📸');
+  });
 })
 
 describe('links are visible', () => {
-    it('inserts text into links', () => {
-        const { getByTestId } = render(<Nav />);
-        expect(getByTestId('link')).toHaveTextContent('Oh Snap!');
-        expect(getByTestId('about')).toHaveTextContent('About me');
-    });
+  it('inserts text into the links', () => {
+    const { getByTestId } = render(<Nav       
+      categories={categories}
+      mockSetCurrentCategory={mockSetCurrentCategory}
+      currentCategory={mockCurrentCategory}
+    />);
+
+    expect(getByTestId('link')).toHaveTextContent('Oh Snap!');
+    expect(getByTestId('about')).toHaveTextContent('About me');
+  });
+
 })
